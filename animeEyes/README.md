@@ -62,7 +62,7 @@ __There is no implementation to balance which officers get images into boards at
 
     java -jar EyesBoardCreator.jar
 
-## How to Use: Make Halloween Party Boards
+## How to Use: Make Halloween Party Rounds
 1. You will get a prompt asking what the highest difficulty is. Enter it (it's most likely 5).
 
 1. You will get a prompt as to what folder contains the anime eyes images. It uses relative paths, so if you did the folder structure above, type ```animeEyesImages```

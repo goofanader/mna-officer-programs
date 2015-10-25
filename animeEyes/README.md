@@ -1,4 +1,4 @@
-# Anime Eyes Board Creator
+# Anime Eyes Rounds Creator
 Created 10/27/2013 by Phyllis Douglas (goofanader@gmail.com, me@phyllis.li)
 
 Version 0.3.0 (10/30/2013)
@@ -14,7 +14,7 @@ This is a Java-based program, so make sure you have the latest [JRE/JDK](http://
 
 Grab the EyesBoardCreator.jar file from this directory and put it anywhere on your computer. ...And that's it :)
 
-## Warning
+## Warning!!!
 This program moves your images, it does not copy them!!! Make sure to make a copy of the images that the officers chose and put that somewhere safe.
 
 ## Setup

@@ -22,7 +22,7 @@ After creating categories for each officer, create .csv files of the data.
 ### Google Sheets Way
 The easiest way to do this is through Google Sheets (since I'm assuming you guys are using that to make categories, right?). Make the categories to import to this program like so:
 
-![](https://github.com/goofanader/mna-anime-trivia/blob/master/images/googleSheetsCategoryFormat.png)
+![](https://github.com/goofanader/mna-officer-programs/blob/master/images/googleSheetsCategoryFormat.png)
 
 Have a header at the top of each officer's Sheet (whatever you like really, but something similar to this):
 
@@ -49,7 +49,7 @@ This program uses series to determine conflicts, so __make sure that matching se
 
 The program obtains the series' names from the answer column. If the series' name is in the question column, set the category to "flip" by putting that word in the column header, next to difficulty:
 
-![](https://github.com/goofanader/mna-anime-trivia/blob/master/images/googleSheetsFlip.png)
+![](https://github.com/goofanader/mna-officer-programs/blob/master/images/googleSheetsFlip.png)
 
 In the event that the question/answer is not from an anime/series, just let the answer be, don't format it.
 

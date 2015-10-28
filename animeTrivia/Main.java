@@ -118,6 +118,21 @@ public class Main {
                 case '4':
                     System.out.println("Specify the file with the pre-made boards.");
                     String file = inputScanner.next();
+                    System.out.println("Use the regular Halloween Party pattern of 3 rounds of 2 boards each, and 3 boards for finals? (y/n)");
+                    char ans = inputScanner.next().charAt(0);
+
+                    if (ans == 'n') {
+                      System.out.println("Enter the number of preliminary rounds:");
+                      numRounds = inputScanner.nextInt();
+                      System.out.println("Enter the number of boards per round:");
+                      numBoards = inputScanner.nextInt();
+                      System.out.println("Enter the number of boards for finals:");
+                      numFinals = inputScanner.nextInt();
+
+                      prelimRounds = new Category[numRounds][numBoards][TOTAL_CATEGORIES];
+                      finals = new Category[numFinals][TOTAL_CATEGORIES];
+                    }
+
                     makeBoards(file);
                     printBoards();
                     break;
@@ -154,7 +169,7 @@ public class Main {
                 String[] newAnswers = new String[TOTAL_QUESTIONS];
                 String[] newSeries = new String[TOTAL_QUESTIONS];
                 String line = fileScanner.nextLine();
-                boolean needsToFlip = false;
+                boolean needsToFlip = false, ignoreQuestions = false, wantsWholeAnswer = false;
 
                 Scanner lineScanner = new Scanner(line);
                 lineScanner.useDelimiter(",");
@@ -167,8 +182,14 @@ public class Main {
                 }
                 if (lineScanner.hasNext()) {
                     temp = lineScanner.next();
-                    if (temp.equals("flip")) {
+                    if (temp.contains("flip")) {
                         needsToFlip = true;
+                    } else if (temp.equals("ignore")) {
+                      ignoreQuestions = true;
+                    }
+
+                    if (temp.contains("whole")) {
+                      wantsWholeAnswer = true;
                     }
                 }
                 //next is title of category, 100, first q, first answer
@@ -250,12 +271,15 @@ public class Main {
                                 }
                             }
                         }
-                        newQuestions[i] = delimitedText;
+                        newQuestions[i] = !ignoreQuestions ? delimitedText : "";
 
-                        if (delimitedText.contains("(")) {
+                        if (delimitedText.contains("(") && delimitedText.matches("^.*\\(.*\\)$") && !wantsWholeAnswer) {
                             newSeries[i] = newQuestions[i].split("\\(")[1];
                             newSeries[i] = newSeries[i].substring(0,
                                     newSeries[i].length() - 1);
+                        } else if (delimitedText.contains(":") && !wantsWholeAnswer) {
+                          newSeries[i] = newQuestions[i].split(":")[0];
+                          //newSeries[i] = newSeries[i].substring(0, newSeries[i].length() - 1);
                         } else {
                             newSeries[i] = newQuestions[i];
                         }
@@ -314,7 +338,7 @@ public class Main {
                         }
 
                         newAnswers[i] = delimitedText;
-                        if (delimitedText.contains("(")) {
+                        if (delimitedText.contains("(") && delimitedText.matches("^.*\\(.*\\)$") && !wantsWholeAnswer) {
                             newSeries[i] = newAnswers[i].split("\\(")[1];
                             newSeries[i] = newSeries[i].substring(0,
                                     newSeries[i].length() - 1);
@@ -347,19 +371,22 @@ public class Main {
             String temp = fileScanner.nextLine();
             int round = 0, board = 0, catNum = 0;
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < TOTAL_CATEGORIES; i++) {
                 String line = fileScanner.nextLine();
                 Scanner lineScanner = new Scanner(line);
                 lineScanner.useDelimiter(",");
 
-                for (int j = 0; j < 9; j++) {
+                for (int j = 0; j < ((numBoards * numRounds) + numFinals); j++) {
                     lineScanner.next();
                     String catTitle = lineScanner.next();
                     Category tempCat = new Category();
                     tempCat.setTitle(catTitle);
 
                     for (Category cat : categoryList) {
-                        if (cat.equals(tempCat) && j < 6) {
+                        /*if (catTitle.contains("Real Movie or Fuck You")) {
+                          System.out.println("Category in Memory: " + cat.getTitle() + " || Found Cat: " + tempCat.getTitle());
+                        }*/
+                        if (cat.equals(tempCat) && j < numBoards * numRounds) {
                             prelimRounds[round][board++][i] = cat;
                             //categoryList.remove(cat);
 
@@ -375,6 +402,7 @@ public class Main {
 
                             break;
                         } else if (cat.equals(tempCat)) {
+                            if (catTitle.contains("Songs You Didn't")) System.out.println("Board #: " + board + " || i: " + i);
                             finals[board++][i] = cat;
                             //categoryList.remove(cat);
 
@@ -389,7 +417,7 @@ public class Main {
                 }
             }
 
-            //printBoards();
+            printBoards();
 
             //create XML for prelim rounds
             for (int i = 0; i < numRounds; i++) {
@@ -578,6 +606,8 @@ public class Main {
                 for (int j = 0; j < TOTAL_QUESTIONS; j++) {
                     out.write("\t\t\t\t\t\t<dict>\n");
                     out.write("\t\t\t\t\t\t\t<key>answer</key>\n");
+                    //System.out.println("board: " + board + " || i: " + i);
+                    //System.out.println(finals[board][i]);
                     out.write("\t\t\t\t\t\t\t<string>"
                             + finals[board][i].getAnswers()[j] + "</string>\n");
                     out.write("\t\t\t\t\t\t\t<key>question</key>\n");

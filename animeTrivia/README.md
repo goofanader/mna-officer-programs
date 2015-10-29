@@ -24,9 +24,13 @@ The easiest way to do this is through Google Sheets (since I'm assuming you guys
 
 ![](https://github.com/goofanader/mna-officer-programs/blob/master/images/googleSheetsCategoryFormat.png)
 
+__Note:__ Do not type "<", ">", "[", or "]" into the .csv file! Those are just symbols showing where you should replace text for the above image. Fields that contain "<>" are things that have to be in the .csv. Fields that contain "[]" are optional/conditional.
+
 Have a header at the top of each officer's Sheet (whatever you like really, but something similar to this):
 
     Category Name,Points,Question,Answer [White Text],Comments
+
+Examples of finished category .csv files are in my [minna-no-halloween-programs git repo](https://github.com/goofanader/minna-no-halloween-programs/tree/master/AnimeHalloweenPrograms/files/animeTrivia/2013/categories).
 
 It's important that each officer has their own page on the Google Sheet. Each officer lists out their categories in their individual sheets.
 
@@ -51,6 +55,10 @@ The program obtains the series' names from the answer column. If the series' nam
 
 ![](https://github.com/goofanader/mna-officer-programs/blob/master/images/googleSheetsFlip.png)
 
+__Note:__ Do not type "<", ">", "[", or "]" into the .csv file! Those are just symbols showing where you should replace text for the above image. Fields that contain "<>" are things that have to be in the .csv. Fields that contain "[]" are optional/conditional.
+
+Example .csv of a flip (look at Category 7): [link](https://raw.githubusercontent.com/goofanader/minna-no-halloween-programs/master/AnimeHalloweenPrograms/files/animeTrivia/2013/categories/Phyllis%20Trivia.csv)
+
 In the event that the question/answer is not from an anime/series, just let the answer be, don't format it.
 
 For series or sequels, use one name to represent it for the program (ex. "Natsume's Book of Friends" rather than "Natsume's Book of Friends 3"), and then edit the question in Questionable if need be.
@@ -68,6 +76,12 @@ __There is no implementation to link similar categories together at the moment._
     * 3: Make boards
     * 5: List out the series the program found
     * q: Quit the program
+
+2. Choose option 5 to make sure the program got all the correct series and there's no repeats. If there are, quit the program and fix the mistakes in the .csvs.
+
+    By "repeat", I mean a different spelling of a series, missing an article (ie. "a", "an", or "the"), a mix of the Japanese and English names, etc.
+    
+    __Make sure to thoroughly check the series list!__ The next part will most likely not work properly if there are repeats!
 
 3. Choose option 3 to make the boards for Halloween Party.
 

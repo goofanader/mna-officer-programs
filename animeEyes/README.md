@@ -22,7 +22,15 @@ __You will need console/terminal access to use this program.__ It is not GUI-bas
 
 Have the officers gather images. __Each filename must be in this format:__
 
-    <series name> - <character name>.<extension: jpg, jpeg, png, gif>
+    <series name> - <character name; nicknames in two single quotes; other names separated by "OR">.<extension: jpg, jpeg, png, gif>
+    
+Examples:
+
+    Pokemon - Pikachu.gif
+    Natsume's Book of Friends - Nyanko-sensei OR Madara.jpg
+    K-ON! - Azusa ''Azu-nyan'' Nakano.png
+
+__Note:__ Do not put the "<" and ">" in there!!! The text between "<" and ">" are just showing what should be in that spot. Fill in the appropriate information!
 
 __Please note that the filename is delimited by " - " in the program, so if the series name contains that, remove the spaces around the hyphen.__
 

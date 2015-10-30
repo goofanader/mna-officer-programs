@@ -116,6 +116,7 @@ public class Main {
                             if (boardAns == 'y') {
                                 //createXMLPrelim();
                                 //createXMLFinal();
+                                makeXMLBoards();
                             }
                         }
                     } while (rerun);
@@ -371,6 +372,21 @@ public class Main {
         } catch (Exception e) {
             System.out.println("\nThere's a formatting problem in " + filename + "! Check to make sure that quoted strings have commas in them, and if not, remove the quotes. If there are two double quotes next to each other (ex.: \"\"), change them to two single quotes (ex.: '').");
             System.exit(1);
+        }
+    }
+
+    private static void makeXMLBoards() {
+        //create XML for prelim rounds
+        for (int i = 0; i < numRounds; i++) {
+            for (int j = 0; j < numBoards; j++) {
+                createXMLPrelim("R" + Integer.toString(i + 1)
+                        + "B" + Integer.toString(j + 1), i, j);
+            }
+        }
+
+        //create XML for final rounds
+        for (int i = 0; i < numFinals; i++) {
+            createXMLFinal("RFB" + Integer.toString(i + 1), i);
         }
     }
 

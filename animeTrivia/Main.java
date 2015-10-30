@@ -810,13 +810,18 @@ public class Main {
             finalsSeriesList.add(new ArrayList<String>());
         }
 
+        int redoCounter = 0, finalSwaps = 0;
+
         while (!hasFinished) {
             boolean canAddCat = true, isDiffEmpty, hasEnoughCats;
+            int diffCounter = 0;
 
             //check if the difficulty list is empty or not
             do {
                 if (difficultiesList.get(currDiff).isEmpty()) {
                     currDiff++;
+                    diffCounter++;
+                    redoCounter++;
 
                     if (currDiff >= maxDifficulty) {
                         currDiff = 1;
@@ -825,21 +830,29 @@ public class Main {
                     //not necessary, though, if everyone made categories...
                 } else {
                     isDiffEmpty = false;
+                    diffCount = 0;
                 }
-            } while (isDiffEmpty);
+            } while (isDiffEmpty && diffCounter < maxDifficulty);
+
+            if (diffCounter >= maxDifficulty)
+            {
+              System.out.println("There are not enough categories to build boards. Please go make some more!");
+              System.exit(1);
+            }
+
             Category toAdd = difficultiesList.get(currDiff).remove(0);
 
             //check if the series are in the round already
             for (int i = 0; i < TOTAL_QUESTIONS; i++) {
                 String series = toAdd.getSeries()[i].toLowerCase();
 
-                if (seriesList.get(round).contains(series)) {
+                if (finalsSeriesList.get(round).contains(series)) {
                     canAddCat = false;
                     break;
-                } else if (round + 1 < numFinals && seriesList.get(round + 1).contains(series)) {
+                } else if (round + 1 < numFinals && finalsSeriesList.get(round + 1).contains(series)) {
                     canAddCat = false;
                     break;
-                } else if (round - 1 > -1 && seriesList.get(round - 1).contains(series)) {
+                } else if (round - 1 > -1 && finalsSeriesList.get(round - 1).contains(series)) {
                     canAddCat = false;
                     break;
                 }
@@ -847,10 +860,11 @@ public class Main {
 
             if (canAddCat) {
                 finals[round][categoryNum] = toAdd;
+                redoCounter = 0;
 
                 //add series to the seriesList for that round
                 for (int i = 0; i < TOTAL_QUESTIONS; i++) {
-                    seriesList.get(round).add(toAdd.getSeries()[i].toLowerCase());
+                    finalsSeriesList.get(round).add(toAdd.getSeries()[i].toLowerCase());
                 }
                 diffCount = 0;
                 categoryNum++;
@@ -869,10 +883,43 @@ public class Main {
 
                 if (diffCount >= difficultiesList.get(currDiff).size()) {
                     currDiff++;
+                    redoCounter++;
 
                     if (currDiff >= difficultiesList.size()) {
                         currDiff = 1;
                     }
+                }
+            }
+
+            if (redoCounter >= maxDifficulty)
+            {
+                // rotate finals boards to the right
+                redoCounter = 0;
+                Category[][] temp = new Category[numFinals][TOTAL_CATEGORIES];
+                ArrayList<ArrayList<String>> tempSeriesList = new ArrayList<ArrayList<String>>();
+
+                for (int i = 0; i < numFinals; i++) {
+                  int oldFinalsIndex = i + 1;
+                  if (oldFinalsIndex >= numFinals) {
+                    oldFinalsIndex = 0;
+                  }
+
+                  for (int j = 0; j < TOTAL_CATEGORIES; j++) {
+                    temp[i][j] = finals[oldFinalsIndex][j];
+                  }
+
+                  tempSeriesList.add(finalsSeriesList.get(oldFinalsIndex));
+                }
+
+                finals = temp;
+                finalsSeriesList = tempSeriesList;
+                finalSwaps++;
+
+                printBoards();
+
+                if (finalSwaps >= numFinals)
+                {
+                  // RESTART!!!
                 }
             }
         }

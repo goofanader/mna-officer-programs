@@ -32,6 +32,8 @@ Have a header at the top of each officer's Sheet (whatever you like really, but 
 
 Examples of finished category .csv files are in my [minna-no-halloween-programs git repo](https://github.com/goofanader/minna-no-halloween-programs/tree/master/AnimeHalloweenPrograms/files/animeTrivia/2013/categories).
 
+If a series has a ":" in the title, in the cell next to difficulty, type in "whole".
+
 It's important that each officer has their own page on the Google Sheet. Each officer lists out their categories in their individual sheets.
 
 When you all are done making categories in this way, simply go to "File > Download as > Comma-separated values" for each officer page.
@@ -58,6 +60,8 @@ The program obtains the series' names from the answer column. If the series' nam
 __Note:__ Do not type "<", ">", "[", or "]" into the .csv file! Those are just symbols showing where you should replace text for the above image. Fields that contain "<>" are things that have to be in the .csv. Fields that contain "[]" are optional/conditional.
 
 Example .csv of a flip (look at Category 7): [link](https://raw.githubusercontent.com/goofanader/minna-no-halloween-programs/master/AnimeHalloweenPrograms/files/animeTrivia/2013/categories/Phyllis%20Trivia.csv)
+
+If a series has a ":" in the title, add "|whole" after the "flip" keyword.
 
 In the event that the question/answer is not from an anime/series, just let the answer be, don't format it.
 

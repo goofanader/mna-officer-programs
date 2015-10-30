@@ -51,6 +51,7 @@ public class Main {
         System.out.println("===Adding Categories===");
         System.out.println("Specify the directory with the trivia .csv files.");
         directoryName = inputScanner.nextLine();
+        System.out.println();
 
         //build category database
         File dir = new File(directoryName);
@@ -153,6 +154,7 @@ public class Main {
     }
 
     private static void buildCategoryList(File filename) {
+        System.out.println("Checking " + filename + "...");
         try {
             Scanner fileScanner = new Scanner(filename);
 
@@ -362,6 +364,9 @@ public class Main {
             fileScanner.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            System.out.println("\nThere's a formatting problem in " + filename + "! Check to make sure that quoted strings have commas in them, and if not, remove the quotes. If there are two double quotes next to each other (ex.: \"\"), change them to two single quotes (ex.: '').");
+            System.exit(1);
         }
     }
 
@@ -458,9 +463,11 @@ public class Main {
             int totalDifficulty = 0;
 
             for (int j = 0; j < TOTAL_CATEGORIES; j++) {
-                System.out.println(finals[i][j].getTitle() + " (" +
-                        finals[i][j].getAuthor() + ")");
-                totalDifficulty += finals[i][j].getDifficulty();
+                if (finals[i] != null && finals[i][j] != null) {
+                  System.out.println(finals[i][j].getTitle() + " (" +
+                          finals[i][j].getAuthor() + ")");
+                  totalDifficulty += finals[i][j].getDifficulty();
+                }
             }
 
             System.out.println("==========Diff: " + totalDifficulty + "==========");
@@ -786,6 +793,9 @@ public class Main {
                 }
             }
         }
+
+        System.out.println("Preliminary rounds have been made. Now making finals...");
+        printBoards();
 
         //now, do the finals boards.
         hasFinished = false;

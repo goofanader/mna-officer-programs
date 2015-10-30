@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Random;
 
 /**
  *
@@ -33,6 +34,7 @@ public class Main {
     private static Category[][][] prelimRounds;
     private static Category[][] finals;
     private static int numBoards, numRounds, numFinals, maxDifficulty;
+    private static Random rng;
 
     public static void main(String[] args) {
         //int numBoards = 2, numRounds = 3, numFinals = 3;
@@ -47,6 +49,8 @@ public class Main {
         categoryList = new ArrayList<Category>();
         prelimRounds = new Category[numRounds][numBoards][TOTAL_CATEGORIES];
         finals = new Category[numFinals][TOTAL_CATEGORIES];
+
+        rng = new Random(System.currentTimeMillis());
 
         System.out.println("===Adding Categories===");
         System.out.println("Specify the directory with the trivia .csv files.");
@@ -442,6 +446,10 @@ public class Main {
     }
 
     private static void printBoards() {
+      printBoards(false);
+    }
+
+    private static void printBoards(boolean isOnlyPrelims) {
         for (int i = 0; i < numRounds; i++) {
             for (int j = 0; j < numBoards; j++) {
                 System.out.println("R" + Integer.toString(i + 1) + "B"
@@ -458,19 +466,21 @@ public class Main {
             }
         }
 
-        for (int i = 0; i < numFinals; i++) {
-            System.out.println("RFB" + Integer.toString(i+1) + ":");
-            int totalDifficulty = 0;
+        if (!isOnlyPrelims) {
+          for (int i = 0; i < numFinals; i++) {
+              System.out.println("RFB" + Integer.toString(i+1) + ":");
+              int totalDifficulty = 0;
 
-            for (int j = 0; j < TOTAL_CATEGORIES; j++) {
-                if (finals[i] != null && finals[i][j] != null) {
-                  System.out.println(finals[i][j].getTitle() + " (" +
-                          finals[i][j].getAuthor() + ")");
-                  totalDifficulty += finals[i][j].getDifficulty();
-                }
-            }
+              for (int j = 0; j < TOTAL_CATEGORIES; j++) {
+                  if (finals[i] != null && finals[i][j] != null) {
+                    System.out.println(finals[i][j].getTitle() + " (" +
+                            finals[i][j].getAuthor() + ")");
+                    totalDifficulty += finals[i][j].getDifficulty();
+                  }
+              }
 
-            System.out.println("==========Diff: " + totalDifficulty + "==========");
+              System.out.println("==========Diff: " + totalDifficulty + "==========");
+          }
         }
     }
 
@@ -795,7 +805,7 @@ public class Main {
         }
 
         System.out.println("Preliminary rounds have been made. Now making finals...");
-        printBoards();
+        printBoards(true);
 
         //now, do the finals boards.
         hasFinished = false;
@@ -821,7 +831,7 @@ public class Main {
                 if (difficultiesList.get(currDiff).isEmpty()) {
                     currDiff++;
                     diffCounter++;
-                    redoCounter++;
+                    //redoCounter++;
 
                     if (currDiff >= maxDifficulty) {
                         currDiff = 1;
@@ -830,13 +840,16 @@ public class Main {
                     //not necessary, though, if everyone made categories...
                 } else {
                     isDiffEmpty = false;
-                    diffCount = 0;
+                    diffCounter = 0;
                 }
+                //System.out.println("diffCounter:" + diffCounter);
             } while (isDiffEmpty && diffCounter < maxDifficulty);
 
             if (diffCounter >= maxDifficulty)
             {
               System.out.println("There are not enough categories to build boards. Please go make some more!");
+              System.out.println("This is as far as this program got:");
+              printBoards();
               System.exit(1);
             }
 
@@ -915,15 +928,41 @@ public class Main {
                 finalsSeriesList = tempSeriesList;
                 finalSwaps++;
 
+                System.out.println("----------------------------------------");
                 printBoards();
 
                 if (finalSwaps >= numFinals)
                 {
                   // RESTART!!!
+                  finalSwaps = redoCounter = round = categoryNum = 0;
+                  currDiff = rng.nextInt(maxDifficulty - 1) + 1;
+
+                  //reset the difficultiesList
+                  for (int i = 0; i < numFinals; i++) {
+                    for (int j = 0; j < TOTAL_CATEGORIES; j++) {
+                      if (finals[i] != null && finals[i][j] != null) {
+                        difficultiesList.get(finals[i][j].getDifficulty()).add(finals[i][j]);
+                      }
+                    }
+                  }
+
+                  //randomize each list
+                  for (int i = 0; i <= maxDifficulty; i++) {
+                      Collections.shuffle(difficultiesList.get(i));
+                  }
+
+                  //reset the finals lists
+                  finals = new Category[numFinals][TOTAL_CATEGORIES];
+                  finalsSeriesList = new ArrayList<ArrayList<String>>();
+
+                  for (int i = 0; i < numFinals; i++) {
+                      finalsSeriesList.add(new ArrayList<String>());
+                  }
                 }
             }
         }
 
+        System.out.println("==================================");
         printBoards();
     }
 }
